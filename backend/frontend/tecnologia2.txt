@@ -1,0 +1,2 @@
+# Práctica 1
+Este es el archivo tecnologia2.txt para la práctica 1.
