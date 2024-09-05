@@ -1,3 +1,10 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>PRACTICA 5</title>
+</head>
+<body>
 <?php
 // 1. Variables válidas
 $_myvar = "Válido porque comienza con un guion bajo";
@@ -107,3 +114,5 @@ echo "Sistema operativo: " . PHP_OS . "<br>";
 echo "Idioma del navegador: " . $_SERVER['HTTP_ACCEPT_LANGUAGE'] . "<br>";
 
 ?>
+</body>
+</html>
