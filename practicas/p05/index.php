@@ -98,6 +98,12 @@ $f = ($a XOR $b);
 var_dump($a, $b, $c, $d, $e, $f);
 echo "<br>Valor de \$c: " . (int)$c; 
 echo "<br>Valor de \$e: " . (int)$e;
+echo "<br>";
 
+// 7. Usar variable $_SERVER
+echo "<br>";
+echo "Versión de PHP: " . $_SERVER['SERVER_SOFTWARE'] . "<br>";
+echo "Sistema operativo: " . PHP_OS . "<br>";
+echo "Idioma del navegador: " . $_SERVER['HTTP_ACCEPT_LANGUAGE'] . "<br>";
 
 ?>
