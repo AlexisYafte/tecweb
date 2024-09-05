@@ -71,5 +71,11 @@ echo "Contenido de \$z después de sobrescribir \$z[0]: ";
 var_dump($z); 
 echo "<br>";
 
+// 4. Leer y usar $GLOBALS
+echo "<br>";
+echo "Valor de \$a desde GLOBALS: " . $GLOBALS['a'] . "<br>";
+echo "Valor de \$b desde GLOBALS: " . $GLOBALS['b'] . "<br>";
+echo "Valor de \$c desde GLOBALS: " . $GLOBALS['c'] . "<br>";
+
 
 ?>
