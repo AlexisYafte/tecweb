@@ -76,6 +76,16 @@ echo "<br>";
 echo "Valor de \$a desde GLOBALS: " . $GLOBALS['a'] . "<br>";
 echo "Valor de \$b desde GLOBALS: " . $GLOBALS['b'] . "<br>";
 echo "Valor de \$c desde GLOBALS: " . $GLOBALS['c'] . "<br>";
+echo "<br>";
+
+// 5. Dar valor a Variables....
+$a = "7 personas";
+$b = (integer) $a; 
+$a = "9E3";
+$c = (double) $a; 
+
+echo "a: $a, b: $b, c: $c<br>";
+echo "<br>";
 
 
 ?>
