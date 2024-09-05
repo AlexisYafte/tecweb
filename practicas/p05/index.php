@@ -87,5 +87,17 @@ $c = (double) $a;
 echo "a: $a, b: $b, c: $c<br>";
 echo "<br>";
 
+// 6. Valor Booleano
+$a = "0";
+$b = "TRUE";
+$c = FALSE;
+$d = ($a OR $b);
+$e = ($a AND $c);
+$f = ($a XOR $b);
+
+var_dump($a, $b, $c, $d, $e, $f);
+echo "<br>Valor de \$c: " . (int)$c; 
+echo "<br>Valor de \$e: " . (int)$e;
+
 
 ?>
