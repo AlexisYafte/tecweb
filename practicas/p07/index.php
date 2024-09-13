@@ -129,8 +129,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <h2>Ejercicio 6</h2>
 <p>Registro de parque vehicular</p>
+<!-- Formulario para buscar por matrícula -->
+<form action="index.php" method="post">
+        <label for="matricula">Buscar por matrícula:</label>
+        <input type="text" id="matricula" name="matricula" placeholder="Ingrese la matrícula" />
+        <input type="submit" value="Buscar">
+    </form>
 
+    <!-- Formulario para mostrar todos los autos -->
+    <form action="index.php" method="post">
+        <input type="hidden" name="mostrar_todos" value="1" />
+        <input type="submit" value="Mostrar todos los autos registrados" />
+    </form>
 
+    <br />
 
+    <?php
+    $parqueVehicular = obtenerParqueVehicular();
+
+    if (isset($_POST['matricula'])) {
+        $matricula = strtoupper($_POST['matricula']);  
+
+        if (isset($parqueVehicular[$matricula])) {
+            echo "<h3>Información del vehículo con matrícula $matricula:</h3>";
+            echo "<strong>Auto:</strong><br>";
+            echo "Marca: " . $parqueVehicular[$matricula]['Auto']['marca'] . "<br>";
+            echo "Modelo: " . $parqueVehicular[$matricula]['Auto']['modelo'] . "<br>";
+            echo "Tipo: " . $parqueVehicular[$matricula]['Auto']['tipo'] . "<br>";
+
+            echo "<strong>Propietario:</strong><br>";
+            echo "Nombre: " . $parqueVehicular[$matricula]['Propietario']['nombre'] . "<br>";
+            echo "Ciudad: " . $parqueVehicular[$matricula]['Propietario']['ciudad'] . "<br>";
+            echo "Dirección: " . $parqueVehicular[$matricula]['Propietario']['direccion'] . "<br>";
+        } else {
+            echo "<p>No se encontró ningún vehículo con la matrícula $matricula.</p>";
+        }
+    }
+
+    if (isset($_POST['mostrar_todos'])) {
+        echo "<h3>Todos los autos registrados:</h3>";
+        foreach ($parqueVehicular as $matricula => $datosVehiculo) {
+            echo "<strong>Matrícula:</strong> $matricula<br>";
+            echo "<strong>Auto:</strong><br>";
+            echo "Marca: " . $datosVehiculo['Auto']['marca'] . "<br>";
+            echo "Modelo: " . $datosVehiculo['Auto']['modelo'] . "<br>";
+            echo "Tipo: " . $datosVehiculo['Auto']['tipo'] . "<br>";
+
+            echo "<strong>Propietario:</strong><br>";
+            echo "Nombre: " . $datosVehiculo['Propietario']['nombre'] . "<br>";
+            echo "Ciudad: " . $datosVehiculo['Propietario']['ciudad'] . "<br>";
+            echo "Dirección: " . $datosVehiculo['Propietario']['direccion'] . "<br>";
+            echo "<hr>";
+        }
+    }
+    ?>
 </body>
 </html>
