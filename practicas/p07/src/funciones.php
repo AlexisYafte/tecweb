@@ -8,28 +8,23 @@ function esMultiplo($numero) {
 <!-- Ejercicio 2 -->
 <?php
 function generarSecuenciaImparParImpar() {
-    $matriz = []; // Matriz para almacenar las secuencias
-    $iteraciones = 0; // Contador de iteraciones
-    $totalNumerosGenerados = 0; // Contador de números generados
+    $matriz = []; 
+    $iteraciones = 0; 
+    $totalNumerosGenerados = 0; 
 
     do {
-        // Generar 3 números aleatorios
-        $num1 = rand(1, 1000); // Puedes ajustar el rango si lo deseas
+        $num1 = rand(1, 1000); 
         $num2 = rand(1, 1000);
         $num3 = rand(1, 1000);
 
-        // Incrementar el contador de números generados
         $totalNumerosGenerados += 3;
 
-        // Verificar el patrón: impar, par, impar
         $patronCorrecto = ($num1 % 2 != 0) && ($num2 % 2 == 0) && ($num3 % 2 != 0);
 
-        // Almacenar la secuencia en la matriz
         $matriz[] = [$num1, $num2, $num3];
 
-        // Incrementar el contador de iteraciones
         $iteraciones++;
-    } while (!$patronCorrecto); // Repetir hasta que el patrón sea correcto
+    } while (!$patronCorrecto);
 
     return [
         'matriz' => $matriz,
@@ -39,6 +34,7 @@ function generarSecuenciaImparParImpar() {
 }
 ?>
 
+<!-- Ejercicio 3 -->
 <?php
 function encontrarMultiploWhile($numeroDado) {
     $contador = 0;
@@ -62,6 +58,20 @@ function encontrarMultiploDoWhile($numeroDado) {
     return [$aleatorio, $contador];
 }
 ?>
+
+<!-- Ejercicio 4 -->
+<?php
+function crearArregloLetras() {
+    $arreglo = [];
+    for ($i = 97; $i <= 122; $i++) {
+        $arreglo[$i] = chr($i);
+    }
+    return $arreglo;
+}
+?>
+
+
+
 
 
 

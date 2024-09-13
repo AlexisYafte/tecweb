@@ -90,5 +90,47 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     ?>
 
+    <h2>Ejercicio 4</h2>
+    <p>Crear arreglo con letras del abecedario</p>
+
+<?php
+$arreglo = crearArregloLetras();
+echo "<table border='1'>";
+echo "<tr><th>Índice</th><th>Letra</th></tr>";
+foreach ($arreglo as $key => $value) {
+    echo "<tr><td>$key</td><td>$value</td></tr>";
+}
+echo "</table>";
+?>
+
+    <h2>Ejercicio 5</h2>
+    <p>Formulario con edad y sexo</p>
+<form action="index.php" method="post">
+    Edad: <input type="number" name="edad" required>
+    Sexo: 
+    <select name="sexo">
+        <option value="femenino">Femenino</option>
+        <option value="masculino">Masculino</option>
+    </select>
+    <input type="submit" value="Enviar">
+</form>
+
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $edad = $_POST['edad'];
+    $sexo = $_POST['sexo'];
+    if ($sexo == 'femenino' && $edad >= 18 && $edad <= 35) {
+        echo "Bienvenida, usted está en el rango de edad permitido.";
+    } else {
+        echo "Error: No cumple los requisitos.";
+    }
+}
+?>
+
+<h2>Ejercicio 6</h2>
+<p>Registro de parque vehicular</p>
+
+
+
 </body>
 </html>
