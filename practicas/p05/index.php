@@ -5,6 +5,8 @@
     <title>PRACTICA 5</title>
 </head>
 <body>
+
+
 <?php
 // 1. Variables válidas
 $_myvar = "Válido porque comienza con un guion bajo";
@@ -114,5 +116,10 @@ echo "Sistema operativo: " . PHP_OS . "<br>";
 echo "Idioma del navegador: " . $_SERVER['HTTP_ACCEPT_LANGUAGE'] . "<br>";
 
 ?>
+
+<p>
+    <a href="https://validator.w3.org/markup/check?uri=referer"><img
+      src="https://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0 Strict" height="31" width="88" /></a>
+</p>
 </body>
 </html>
