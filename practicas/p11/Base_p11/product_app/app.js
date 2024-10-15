@@ -60,38 +60,45 @@ function buscarID(e) {
     client.send("id="+id);
 }
 
+// FUNCIÓN CALLBACK DE BOTÓN "Buscar Producto"
 function buscarProducto(e) {
-    e.preventDefault();
+    e.preventDefault();  // Evita que el formulario se envíe de manera tradicional
 
     // SE OBTIENE EL TÉRMINO DE BÚSQUEDA A ENVIAR
-    var searchTerm = document.getElementById('search').value;
+    const searchTerm = document.getElementById('search').value.trim();
 
-    // SE CREA EL OBJETO DE CONEXIÓN ASÍNCRONA AL SERVIDOR
-    var client = getXMLHttpRequest();
+    // VALIDAR SI EL CAMPO DE BÚSQUEDA NO ESTÁ VACÍO
+    if (!searchTerm) {
+        alert("Por favor, ingresa un término de búsqueda.");
+        return;
+    }
+
+    // CREAR CONEXIÓN AJAX
+    const client = getXMLHttpRequest();
     client.open('GET', './backend/read.php?search=' + encodeURIComponent(searchTerm), true);
     client.onreadystatechange = function () {
-        // SE VERIFICA SI LA RESPUESTA ESTÁ LISTA Y FUE SATISFACTORIA
         if (client.readyState == 4 && client.status == 200) {
-            console.log('[CLIENTE]\n'+client.responseText);
+            // Mostrar en consola el resultado obtenido
+            console.log('[CLIENTE]\n' + client.responseText);
 
-            // SE OBTIENE EL OBJETO DE DATOS A PARTIR DE UN STRING JSON
-            let productos = JSON.parse(client.responseText);
+            // Convertir la respuesta JSON a un objeto
+            const productos = JSON.parse(client.responseText);
 
-            // SE VERIFICA SI EL OBJETO JSON TIENE DATOS
+            // Revisar si hay resultados y mostrarlos
             if (productos.length > 0) {
                 let output = '';
-                productos.forEach(function(producto) {
+                productos.forEach(function (producto) {
                     output += `
                         <tr>
                             <td>${producto.id}</td>
                             <td>${producto.nombre}</td>
                             <td>
                                 <ul>
-                                    <li>precio: ${producto.precio}</li>
-                                    <li>unidades: ${producto.unidades}</li>
-                                    <li>modelo: ${producto.modelo}</li>
-                                    <li>marca: ${producto.marca}</li>
-                                    <li>detalles: ${producto.detalles}</li>
+                                    <li>Precio: ${producto.precio}</li>
+                                    <li>Unidades: ${producto.unidades}</li>
+                                    <li>Modelo: ${producto.modelo}</li>
+                                    <li>Marca: ${producto.marca}</li>
+                                    <li>Detalles: ${producto.detalles}</li>
                                 </ul>
                             </td>
                         </tr>
@@ -99,65 +106,97 @@ function buscarProducto(e) {
                 });
                 document.getElementById("productos").innerHTML = output;
             } else {
+                // Mostrar mensaje si no se encuentran productos
                 document.getElementById("productos").innerHTML = '<tr><td colspan="3">No se encontraron productos.</td></tr>';
             }
+        } else if (client.readyState == 4) {
+            alert("Error en la búsqueda, por favor intenta de nuevo.");
         }
     };
-    client.send();
+    client.send();  // Enviar la solicitud
 }
 
-
-// FUNCIÓN CALLBACK DE BOTÓN "Agregar Producto"
-function agregarProducto(e) {
-    e.preventDefault();
-
-    // SE OBTIENE DESDE EL FORMULARIO EL JSON A ENVIAR
-    var productoJsonString = document.getElementById('description').value;
-    // SE CONVIERTE EL JSON DE STRING A OBJETO
-    var finalJSON = JSON.parse(productoJsonString);
-    // SE AGREGA AL JSON EL NOMBRE DEL PRODUCTO
-    finalJSON['nombre'] = document.getElementById('name').value;
-    // SE OBTIENE EL STRING DEL JSON FINAL
-    productoJsonString = JSON.stringify(finalJSON,null,2);
-
-    // SE CREA EL OBJETO DE CONEXIÓN ASÍNCRONA AL SERVIDOR
-    var client = getXMLHttpRequest();
-    client.open('POST', './backend/create.php', true);
-    client.setRequestHeader('Content-Type', "application/json;charset=UTF-8");
-    client.onreadystatechange = function () {
-        // SE VERIFICA SI LA RESPUESTA ESTÁ LISTA Y FUE SATISFACTORIA
-        if (client.readyState == 4 && client.status == 200) {
-            console.log(client.responseText);
-        }
-    };
-    client.send(productoJsonString);
-}
-
-// SE CREA EL OBJETO DE CONEXIÓN COMPATIBLE CON EL NAVEGADOR
+// FUNCIÓN PARA CREAR EL OBJETO DE CONEXIÓN AJAX
 function getXMLHttpRequest() {
-    var objetoAjax;
+    let objetoAjax;
 
-    try{
-        objetoAjax = new XMLHttpRequest();
-    }catch(err1){
-        /**
-         * NOTA: Las siguientes formas de crear el objeto ya son obsoletas
-         *       pero se comparten por motivos historico-académicos.
-         */
-        try{
-            // IE7 y IE8
-            objetoAjax = new ActiveXObject("Msxml2.XMLHTTP");
-        }catch(err2){
-            try{
-                // IE5 y IE6
-                objetoAjax = new ActiveXObject("Microsoft.XMLHTTP");
-            }catch(err3){
+    try {
+        objetoAjax = new XMLHttpRequest();  // Para navegadores modernos
+    } catch (err1) {
+        try {
+            objetoAjax = new ActiveXObject("Msxml2.XMLHTTP");  // Para IE7 y IE8
+        } catch (err2) {
+            try {
+                objetoAjax = new ActiveXObject("Microsoft.XMLHTTP");  // Para IE5 y IE6
+            } catch (err3) {
                 objetoAjax = false;
             }
         }
     }
     return objetoAjax;
 }
+
+
+// FUNCIÓN CALLBACK DE BOTÓN "Agregar Producto"
+function agregarProducto(e) {
+    e.preventDefault();  // Evita que el formulario se envíe automáticamente
+
+    // OBTENER VALORES DESDE EL FORMULARIO
+    const nombre = document.getElementById('name').value.trim();
+    const descripcion = document.getElementById('description').value.trim();
+
+    // VALIDACIONES DEL CLIENTE
+    if (!nombre) {
+        alert('El nombre del producto es obligatorio.');
+        return;  // Salir de la función si no hay nombre
+    }
+
+    let producto;
+    try {
+        // Convertir la descripción (string) en JSON
+        producto = JSON.parse(descripcion);
+    } catch (error) {
+        alert('La descripción debe estar en formato JSON válido.');
+        return;  // Salir de la función si no es JSON válido
+    }
+
+    // Validar que el JSON tenga los campos requeridos
+    if (!producto.precio || isNaN(producto.precio) || producto.precio <= 0) {
+        alert('El precio debe ser un número mayor a 0.');
+        return;  // Salir de la función si la validación falla
+    }
+
+    if (!producto.unidades || isNaN(producto.unidades) || producto.unidades <= 0) {
+        alert('Las unidades deben ser un número mayor a 0.');
+        return;  // Salir de la función si la validación falla
+    }
+
+    // Añadir el nombre al objeto producto
+    producto.nombre = nombre;
+
+    // Convertir el objeto producto en un JSON string
+    const productoJsonString = JSON.stringify(producto);
+
+    // CREAR CONEXIÓN AJAX AL SERVIDOR
+    const client = getXMLHttpRequest();
+    client.open('POST', './backend/create.php', true);
+    client.setRequestHeader('Content-Type', "application/json;charset=UTF-8");
+
+    client.onreadystatechange = function () {
+        if (client.readyState == 4) {
+            if (client.status == 200) {
+                // Mostrar el mensaje del servidor
+                alert(client.responseText);
+            } else {
+                alert('Error en la conexión al servidor.');
+            }
+        }
+    };
+
+    // ENVIAR EL JSON AL SERVIDOR
+    client.send(productoJsonString);
+}
+
 
 function init() {
     /**

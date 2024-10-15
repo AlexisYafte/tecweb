@@ -1,16 +1,53 @@
 <?php
     include_once __DIR__.'/database.php';
 
-    // SE OBTIENE LA INFORMACIÓN DEL PRODUCTO ENVIADA POR EL CLIENTE
-    $producto = file_get_contents('php://input');
-    if(!empty($producto)) {
-        // SE TRANSFORMA EL STRING DEL JASON A OBJETO
-        $jsonOBJ = json_decode($producto);
-        /**
-         * SUSTITUYE LA SIGUIENTE LÍNEA POR EL CÓDIGO QUE REALICE
-         * LA INSERCIÓN A LA BASE DE DATOS. COMO RESPUESTA REGRESA
-         * UN MENSAJE DE ÉXITO O DE ERROR, SEGÚN SEA EL CASO.
-         */
-        echo '[SERVIDOR] Nombre: '.$jsonOBJ->nombre;
+    // OBTENER LOS DATOS DEL PRODUCTO ENVIADO POR EL CLIENTE (JSON)
+    $producto = json_decode(file_get_contents('php://input'), true);
+
+    if (!empty($producto)) {
+        // OBTENER VALORES DEL JSON
+        $nombre = $producto['nombre'];
+        $precio = $producto['precio'];
+        $unidades = $producto['unidades'];
+        $modelo = $producto['modelo'];
+        $marca = $producto['marca'];
+        $detalles = $producto['detalles'];
+        $imagen = isset($producto['imagen']) ? $producto['imagen'] : 'img/default.png';
+
+        // VALIDAR SI EL PRODUCTO YA EXISTE (MISMO NOMBRE Y eliminado=0)
+        $queryCheck = "SELECT * FROM productos WHERE nombre = ? AND eliminado = 0";
+        if ($stmtCheck = $conexion->prepare($queryCheck)) {
+            $stmtCheck->bind_param("s", $nombre);
+            $stmtCheck->execute();
+            $resultCheck = $stmtCheck->get_result();
+
+            // SI YA EXISTE, NO HACER INSERCIÓN
+            if ($resultCheck->num_rows > 0) {
+                echo "El producto ya existe en la base de datos.";
+            } else {
+                // INSERTAR NUEVO PRODUCTO
+                $queryInsert = "INSERT INTO productos (nombre, precio, unidades, modelo, marca, detalles, imagen) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                if ($stmtInsert = $conexion->prepare($queryInsert)) {
+                    $stmtInsert->bind_param("sdissss", $nombre, $precio, $unidades, $modelo, $marca, $detalles, $imagen);
+
+                    if ($stmtInsert->execute()) {
+                        echo "Producto agregado exitosamente.";
+                    } else {
+                        echo "Error al agregar el producto.";
+                    }
+
+                    $stmtInsert->close();
+                }
+            }
+
+            $stmtCheck->close();
+        } else {
+            echo "Error en la consulta: " . $conexion->error;
+        }
+
+        $conexion->close();
+    } else {
+        echo "No se recibieron datos del producto.";
     }
 ?>
+
