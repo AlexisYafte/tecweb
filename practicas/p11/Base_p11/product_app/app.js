@@ -60,6 +60,53 @@ function buscarID(e) {
     client.send("id="+id);
 }
 
+function buscarProducto(e) {
+    e.preventDefault();
+
+    // SE OBTIENE EL TÉRMINO DE BÚSQUEDA A ENVIAR
+    var searchTerm = document.getElementById('search').value;
+
+    // SE CREA EL OBJETO DE CONEXIÓN ASÍNCRONA AL SERVIDOR
+    var client = getXMLHttpRequest();
+    client.open('GET', './backend/read.php?search=' + encodeURIComponent(searchTerm), true);
+    client.onreadystatechange = function () {
+        // SE VERIFICA SI LA RESPUESTA ESTÁ LISTA Y FUE SATISFACTORIA
+        if (client.readyState == 4 && client.status == 200) {
+            console.log('[CLIENTE]\n'+client.responseText);
+
+            // SE OBTIENE EL OBJETO DE DATOS A PARTIR DE UN STRING JSON
+            let productos = JSON.parse(client.responseText);
+
+            // SE VERIFICA SI EL OBJETO JSON TIENE DATOS
+            if (productos.length > 0) {
+                let output = '';
+                productos.forEach(function(producto) {
+                    output += `
+                        <tr>
+                            <td>${producto.id}</td>
+                            <td>${producto.nombre}</td>
+                            <td>
+                                <ul>
+                                    <li>precio: ${producto.precio}</li>
+                                    <li>unidades: ${producto.unidades}</li>
+                                    <li>modelo: ${producto.modelo}</li>
+                                    <li>marca: ${producto.marca}</li>
+                                    <li>detalles: ${producto.detalles}</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    `;
+                });
+                document.getElementById("productos").innerHTML = output;
+            } else {
+                document.getElementById("productos").innerHTML = '<tr><td colspan="3">No se encontraron productos.</td></tr>';
+            }
+        }
+    };
+    client.send();
+}
+
+
 // FUNCIÓN CALLBACK DE BOTÓN "Agregar Producto"
 function agregarProducto(e) {
     e.preventDefault();
@@ -120,3 +167,4 @@ function init() {
     var JsonString = JSON.stringify(baseJSON,null,2);
     document.getElementById("description").value = JsonString;
 }
+
