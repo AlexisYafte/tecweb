@@ -5,12 +5,8 @@
     <title>ProductApp</title>
     <!-- BOOTSTRAP 4  -->
     <link rel="stylesheet" href="https://bootswatch.com/4/superhero/bootstrap.min.css">
-    <!-- JQUERY -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-      crossorigin="anonymous"></script>
   </head>
-  <body>
+  <body onload="init()">
 
     <!-- BARRA DE NAVEGACIÓN  -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -20,11 +16,12 @@
       </button>
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-auto"></ul>
-        <form class="form-inline my-2 my-lg-0">
-          <input class="form-control mr-sm-2" name="search" id="search" type="search" placeholder="ID, marca o descripción" aria-label="Search">
-          <button class="btn btn-success my-2 my-sm-0" type="submit" id="search-btn">Buscar</button>
-        </form>
+        <ul class="navbar-nav ml-auto">
+          <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" name="search" id="search" type="search" placeholder="ID, marca o descripción" aria-label="Search">
+            <button class="btn btn-success my-2 my-sm-0" type="submit" id="buscar">Buscar</button>
+          </form>
+        </ul>
       </div>
     </nav>
 
@@ -35,6 +32,7 @@
             <div class="card-body">
               <!-- FORMULARIO PARA AGREGAR PRODUCTO -->
               <form id="product-form">
+                <input type="hidden" id="product-id">
                 <div class="form-group">
                   <input class="form-control" type="text" id="name" placeholder="Nombre de producto">
                 </div>
@@ -42,7 +40,7 @@
                   <textarea class="form-control" id="description" cols="30" rows="10" placeholder="JSON de producto"></textarea>
                 </div>
                 <input type="hidden" id="productId">
-                <button class="btn btn-primary btn-block text-center" type="submit" id="add-product-btn">
+                <button class="btn btn-primary btn-block text-center" type="submit">
                   Agregar Producto
                 </button>
               </form>
@@ -52,7 +50,7 @@
 
         <!-- TABLA  -->
         <div class="col-md-7">
-          <div class="card my-4 d-none" id="product-result">
+          <div class="card my-4" id="product-result">
             <div class="card-body">
               <!-- RESULTADO -->
               <ul id="container"></ul>
@@ -73,6 +71,9 @@
       </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"></script>
     <!-- Lógica del Frontend -->
     <script src="app.js"></script>
   </body>
