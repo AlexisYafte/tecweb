@@ -253,3 +253,4 @@ function getXMLHttpRequest() {
     }
     return objetoAjax;
 }
+  
